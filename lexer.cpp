@@ -8,7 +8,7 @@ using namespace std;
 vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
-"with","yield","int","str"};
+"with","yield","int","str","object","bool","self","print","__init__"}; //Object,bool,self,print e __init__ no son reservadas pera segun eso se manejan asi
 
 
 
@@ -33,7 +33,6 @@ int solve(string s){
     	{
         case 0: 
         	{
-                //Aun no manejo bien los indices
 	        	cont++;
 	        	string aux=s.substr(cont,1);
 	        	if(s[cont]=='_' || regex_match(aux, letra)){
@@ -47,6 +46,30 @@ int solve(string s){
 	        	}else if(s[cont]=='"'){
 	        		state=4;
 	        		s2=s2+s[cont];
+	        		cont++;
+	        	}else if(s[cont]=='='){
+	        		state=5;
+	        		s2=s2+s[cont];
+	        		cont++;
+	        	}else if(s[cont]=='-'){
+	        		state=6;
+	        		s2=s2+s[cont];
+	        		cont++;
+	        	}else if(s[cont]=='/'){
+	        		state=7;
+	        		s2=s2+s[cont];
+	        		cont++;
+	        	}else if(s[cont]=='!'){
+	        		state=8;
+	        		s2=s2+s[cont];
+	        		cont++;
+	        	}else if(s[cont]=='>'){
+	        		state=9;
+	        		s2=s2+s[cont];
+	        		cont++;
+	        	}else if(s[cont]=='<'){
+	        		state=10;
+	        		s2=s2+s;
 	        		cont++;
 	        	}else if(s[cont]=='('){ //Suponiendo que (( seguidos son dos tk_par_izq
 	        		cout<<"tk_par_izq"<<endl;
@@ -125,6 +148,79 @@ int solve(string s){
     			}
     			break;
     		}
+    	 case 5:
+    		{
+    			if(s[cont]=='='){
+    				cout<<"tk_igual_igual"<<endl;
+    				cont--;
+    			}else{
+    				cout<<"tk_asign"<<endl;
+    			}
+    			state=0;
+    			s2="";
+    			break;
+    		}
+    	case 6:
+    		{
+    			if(s[cont]=='>'){
+    				s2=s2+s[cont];
+    				cout<<"Tk_ejecuta"<<endl;
+    			}else{
+    				cout<<"tk_neg"<<endl;
+    				cont--;
+    			}
+    			state=0;
+    			s2="";
+    			break;
+    		}
+    	case 7:
+    		{
+    			if(s[cont]=='/'){
+    				s2=s2+s[cont];
+    				cout<<"tk_division"<<endl;
+    			}
+    			state=0;
+    			s2="";
+    			break;
+    		}
+    	case 8:
+    		{
+    			if(s[cont]=='='){
+    				s2=s2+s[cont];
+    				cout<<"tk_distinto"<<endl;
+    			}
+    			state=0;
+    			s2="";
+    			break;
+    		}
+    	 case 9:
+    		{
+    			if(s[cont]=='='){
+    				s2=s2+s[cont];
+    				cout<<"tk_mayor_igual"<<endl;
+    			}else{
+    				s2=s2+s[cont];
+    				cout<<"tk_mayor"<<endl;
+    				cont--;
+    			}
+    			state=0;
+    			s2="";
+    			break;
+    		}
+    	case 10:
+    		{
+    			if(s[cont]=='='){
+    				s2=s2+s[cont];
+    				cout<<"tk_menor_igual"<<endl;
+    			}else{
+    				s2=s2+s[cont];
+    				cout<<"tk_menor"<<endl;
+    				cont--;
+    			}
+    			state=0;
+    			s2="";
+    			break;
+    		}
         default: 
         	cout << "Usted ha ingresado una opción incorrecta";
         	cont=s.length(); //Solo para propositos de saltarme el runtime error
@@ -146,7 +242,5 @@ int solve(string s){
      	int t=solve(line);
      	
      }
-     
-     
      return 0;
 }
