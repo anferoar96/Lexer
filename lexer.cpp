@@ -21,7 +21,7 @@ string search(string word){
 	return "";
 }
 
-int solve(string s){
+int solve(string s,int fila,int columna){
 	int state=0;
 	string s2="";
 	int cont=-1;
@@ -37,54 +37,63 @@ int solve(string s){
 	        	string aux=s.substr(cont,1);
 	        	if(s[cont]=='_' || regex_match(aux, letra)){
 	        		state=1;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(regex_match(aux,numero)){
 	        		state=3;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='"'){
 	        		state=4;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='='){
 	        		state=5;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='-'){
 	        		state=6;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='/'){
 	        		state=7;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='!'){
 	        		state=8;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='>'){
 	        		state=9;
+	        		columna=cont;
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='<'){
 	        		state=10;
-	        		s2=s2+s;
+	        		columna=cont;
+	        		s2=s2+s[cont];
 	        		cont++;
 	        	}else if(s[cont]=='('){ //Suponiendo que (( seguidos son dos tk_par_izq
-	        		cout<<"tk_par_izq"<<endl;
+	        		cout<<"<tk_par_izq,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]==')'){
-	        		cout<<"tk_par_der"<<endl;
+	        		cout<<"<tk_par_der,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]==':'){
-	        		cout<<"tk_dos_puntos"<<endl;
+	        		cout<<"<tk_dos_puntos,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='%'){
-	        		cout<<"tk_modulo"<<endl;
+	        		cout<<"<tk_modulo,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='*'){
-	        		cout<<"rk_multi"<<endl;
+	        		cout<<"<tk_multi,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='+'){
-	        		cout<<"tk_suma"<<endl;
+	        		cout<<"<tk_suma,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='.'){
-	        		cout<<"tk_punto"<<endl;
+	        		cout<<"<tk_punto,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]==' '){
 	        		continue;
 	        	}
@@ -100,9 +109,9 @@ int solve(string s){
 	        	//cout<<s2<<endl;
 	        	string key=search(s2); //Retornar la string
 	        	if(key.empty()){
-	        		cout<<"Identificador"<<endl;
+	        		cout<<"<id,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
 	        	}else{
-	        		cout<<key<<endl;
+	        		cout<<"<"<<key<<","<<fila<<","<<columna+1<<">"<<endl;
 	        	}
 	        	state=0;
 	        	s2="";
@@ -124,7 +133,7 @@ int solve(string s){
         			cout<<"Error2"<<endl;
         			cont=s.length();
         		}else{
-        			cout<<"tk_entero"<<endl;
+        			cout<<"<tk_entero,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
         			state=0;
         			s2="";
         		}
@@ -142,7 +151,8 @@ int solve(string s){
     				cout<<"error3"<<endl;
     				cont=s.length();
     			}else{
-    				cout<<"tk_cadena"<<endl;
+    				s2=s2+'"';
+    				cout<<"<tk_cadena,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
     				state=0;
     				s2="";
     			}
@@ -151,10 +161,10 @@ int solve(string s){
     	 case 5:
     		{
     			if(s[cont]=='='){
-    				cout<<"tk_igual_igual"<<endl;
+    				cout<<"<tk_igual_igual,"<<fila<<","<<columna+1<<">"<<endl;
     				cont--;
     			}else{
-    				cout<<"tk_asign"<<endl;
+    				cout<<"<tk_asig,"<<fila<<","<<columna+1<<">"<<endl;
     			}
     			state=0;
     			s2="";
@@ -164,9 +174,9 @@ int solve(string s){
     		{
     			if(s[cont]=='>'){
     				s2=s2+s[cont];
-    				cout<<"Tk_ejecuta"<<endl;
+    				cout<<"<tk_ejecuta,"<<fila<<","<<columna+1<<">"<<endl;
     			}else{
-    				cout<<"tk_neg"<<endl;
+    				cout<<"<tk_neg,"<<fila<<","<<columna+1<<">"<<endl;
     				cont--;
     			}
     			state=0;
@@ -177,7 +187,7 @@ int solve(string s){
     		{
     			if(s[cont]=='/'){
     				s2=s2+s[cont];
-    				cout<<"tk_division"<<endl;
+    				cout<<"<tk_division,"<<fila<<","<<columna+1<<">"<<endl;
     			}
     			state=0;
     			s2="";
@@ -187,7 +197,7 @@ int solve(string s){
     		{
     			if(s[cont]=='='){
     				s2=s2+s[cont];
-    				cout<<"tk_distinto"<<endl;
+    				cout<<"<tk_distinto,"<<fila<<","<<columna+1<<">"<<endl;
     			}
     			state=0;
     			s2="";
@@ -197,10 +207,10 @@ int solve(string s){
     		{
     			if(s[cont]=='='){
     				s2=s2+s[cont];
-    				cout<<"tk_mayor_igual"<<endl;
+    				cout<<"<tk_mayor_igual,"<<fila<<","<<columna+1<<">"<<endl;
     			}else{
     				s2=s2+s[cont];
-    				cout<<"tk_mayor"<<endl;
+    				cout<<"<tk_mayor,"<<fila<<","<<columna+1<<">"<<endl;
     				cont--;
     			}
     			state=0;
@@ -211,10 +221,10 @@ int solve(string s){
     		{
     			if(s[cont]=='='){
     				s2=s2+s[cont];
-    				cout<<"tk_menor_igual"<<endl;
+    				cout<<"<tk_menor_igual,"<<fila<<","<<columna+1<<">"<<endl;
     			}else{
     				s2=s2+s[cont];
-    				cout<<"tk_menor"<<endl;
+    				cout<<"<tk_menor,"<<fila<<","<<columna+1<<">"<<endl;
     				cont--;
     			}
     			state=0;
@@ -238,9 +248,13 @@ int solve(string s){
      cin.tie(NULL);
      
      string line;
+     int fila=1,col;
      while(getline(cin,line)){
-     	int t=solve(line);
-     	
+     	col=1;
+     	int t=solve(line,fila,col);
+     	fila++;
      }
+     
+     
      return 0;
 }

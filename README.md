@@ -4,8 +4,11 @@ Repository with the lexical analizer for ChocoPy
 editado by rene
 
 Done:
-- Identificacion de identificadores, numeros, cadenas de texto, keywords y todos los simbolos("(",")",entre otros)
+- Identificacion todos los tipos de token,lexema, junto con la fila y la columna respectiva.
 
 To do:
-- Colocar restricciones de error del lexer
+- Hacer pruebas de funcionamiento
+- Manejo de errores
 - Agregar clase y agregar objeto con atributos para no mezclar el codigo
+- Optimizar codigo
+- Manejo de los comentarios
