@@ -12,3 +12,8 @@ To do:
 - Agregar clase y agregar objeto con atributos para no mezclar el codigo
 - Optimizar codigo
 - Manejo de los comentarios
+
+How to compile and run
+
+- g++ lexer.cpp -o main
+- ./main.exe (windows) /main (linux)

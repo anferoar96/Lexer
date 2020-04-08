@@ -1,5 +1,9 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include <regex>
+#include <fstream>
+#include <string>
+#include <vector>
+
 using namespace std; 
 
 #define ll long long
@@ -8,7 +12,7 @@ using namespace std;
 vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
-"with","yield","int","str","object","bool","self","print"}; //Object,bool,self,print e __init__ no son reservadas pera segun eso se manejan asi
+"with","yield","int","str","object","bool","self","print"}; //Object,bool,self,print no son reservadas pera segun eso se manejan asi
 
 
 
@@ -248,13 +252,18 @@ int solve(string s,int fila,int columna){
      cin.tie(NULL);
      
      string line;
+	 ifstream myfile ("Casos/1.txt");
      int fila=1,col;
-     while(getline(cin,line)){
-     	col=1;
-     	int t=solve(line,fila,col);
-     	fila++;
-     }
-     
-     
+	if (myfile.is_open()){
+		while ( getline (myfile,line) ){
+			col=1;
+     		int t=solve(line,fila,col);
+     		fila++;
+		}
+    	myfile.close();
+  	}else{
+		  cout << "Unable to open file"<<endl; 
+	}
+   
      return 0;
 }
