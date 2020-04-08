@@ -8,7 +8,7 @@ using namespace std;
 vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
-"with","yield","int","str","object","bool","self","print","__init__"}; //Object,bool,self,print e __init__ no son reservadas pera segun eso se manejan asi
+"with","yield","int","str","object","bool","self","print"}; //Object,bool,self,print e __init__ no son reservadas pera segun eso se manejan asi
 
 
 
