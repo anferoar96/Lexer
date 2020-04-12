@@ -12,7 +12,7 @@ using namespace std;
 vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
-"with","yield","int","str","object","bool","self","print"}; //Object,bool,self,print no son reservadas pera segun eso se manejan asi
+"with","yield","int","str","object","bool","self","print","len"}; //Object,bool,self,print no son reservadas pera segun eso se manejan asi
 
 
 
@@ -40,7 +40,6 @@ int solve(string s,int fila,int columna){
         	{
 	        	cont++;
 	        	string aux=s.substr(cont,1);
-				
 				 if(int(s[cont])<32 || int(s[cont])>126 ){
 					cont=s.length();
 				}
@@ -152,21 +151,18 @@ int solve(string s,int fila,int columna){
     		}
     	case 4:
     		{
-    			
-    			while(regex_match(s.substr(cont,1), numletra) || s[cont]==' ' ){ //Mejorarlo para que solo admita ASCII del 32 al 126
-    				s2=s2+s[cont];
+				while((int(s[cont])>=32 && int(s[cont])<=126) ){ //Mejorarlo para que solo admita ASCII del 32 al 126
+					s2=s2+s[cont];
     				cont++;
+					if(s[cont]=='"'){
+						s2=s2+s[cont];
+						break;
+					}
     			}
-    			
-    			if(s[cont]!='"'){
-    				cout<<"error3"<<endl;
-    				cont=s.length();
-    			}else{
-    				s2=s2+'"';
-    				cout<<"<tk_cadena,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
-    				state=0;
-    				s2="";
-    			}
+    			//cont--;
+    			cout<<"<tk_cadena,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
+    			state=0;
+    			s2="";
     			break;
     		}
     	 case 5:
@@ -261,7 +257,6 @@ int solve(string s,int fila,int columna){
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){
 			if(line.length()==0){
-				continue;
 			}else{
 				col=1;
      			int t=solve(line,fila,col);	
