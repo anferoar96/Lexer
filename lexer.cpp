@@ -39,6 +39,10 @@ int solve(string s,int fila,int columna){
         	{
 	        	cont++;
 	        	string aux=s.substr(cont,1);
+				if(int(s[cont])<32 || int(s[cont])>126){
+					cout<<"Error"<<endl;
+					cont=s.length();
+				}
 	        	if(s[cont]=='_' || regex_match(aux, letra)){
 	        		state=1;
 	        		columna=cont;
@@ -96,7 +100,9 @@ int solve(string s,int fila,int columna){
 	        		cout<<"<tk_multi,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='+'){
 	        		cout<<"<tk_suma,"<<fila<<","<<cont+1<<">"<<endl;
-	        	}else if(s[cont]=='.'){
+				}else if(s[cont]=='#'){
+					cont = s.length();
+				}else if(s[cont]=='.'){
 	        		cout<<"<tk_punto,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]==' '){
 	        		continue;
@@ -252,7 +258,7 @@ int solve(string s,int fila,int columna){
      cin.tie(NULL);
      
      string line;
-	 ifstream myfile ("Casos/1.txt");
+	 ifstream myfile ("Casos/prueba.txt");
      int fila=1,col;
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){

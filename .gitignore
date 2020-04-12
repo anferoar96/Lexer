@@ -2,3 +2,4 @@
 *.bin
 lexer.cpp.tcs
 *.exe
+lexer
