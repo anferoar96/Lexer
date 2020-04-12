@@ -41,7 +41,12 @@ int solve(string s,int fila,int columna){
 	        	cont++;
 	        	string aux=s.substr(cont,1);
 				 if(int(s[cont])<32 || int(s[cont])>126 ){
-					cont=s.length();
+					if(s[cont]== '\0'){
+						cont=s.length();
+					}else{
+						cout<<"Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;  //>>> Error léxico(linea:X,posicion:Y)
+						return -1;
+					}
 				}
 	        	if(s[cont]=='_' || regex_match(aux, letra)){
 	        		state=1;
@@ -134,26 +139,21 @@ int solve(string s,int fila,int columna){
 				while(regex_match(s.substr(cont,1), numero)){
         			s2=s2+s[cont];
         			if(stol(s2)>2147483647){
-        				cout<<"Error1"<<endl;
-        				cont=s.length(); //Para que se salga del loop, tiene que ser mejorado
-        				break;
+        				cout<<"Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
+        				return -1;
         			}
         			cont++;
         		}
         		cont--;
-        		if(s[cont]=='?'){ //Final de linea hay que solucionarlo
-        			cout<<"Error2"<<endl;
-        			cont=s.length();
-        		}else{
-        			cout<<"<tk_entero,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
-        			state=0;
-        			s2="";
-        		}
+				cout<<"<tk_entero,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
+        		state=0;
+        		s2="";
+
         		break;
     		}
     	case 4:
     		{
-				while((int(s[cont])>=32 && int(s[cont])<=126) ){ //Mejorarlo para que solo admita ASCII del 32 al 126
+				while((int(s[cont])>=32 && int(s[cont])<=126) ){ 
 					s2=s2+s[cont];
     				cont++;
 					if(s[cont]=='"'){
@@ -161,8 +161,11 @@ int solve(string s,int fila,int columna){
 						break;
 					}
     			}
-    			//cont--;
     			cout<<"<tk_cadena,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
+				if(int(s[cont])<32 || s[cont]>126){
+					cout<<"Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
+					return -1;
+				}
     			state=0;
     			s2="";
     			break;
@@ -254,7 +257,7 @@ int solve(string s,int fila,int columna){
  int main()
 {
      string line;
-	 ifstream myfile ("Casos/L4.txt");
+	 ifstream myfile ("Casos/L2.txt");
      int fila=1,col;
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){
@@ -262,6 +265,9 @@ int solve(string s,int fila,int columna){
 			}else{
 				col=1;
      			int t=solve(line,fila,col);	
+				if(t==-1){
+					break;
+				}
 			}	
 			fila++;
 		}

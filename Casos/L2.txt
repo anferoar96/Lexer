@@ -1,10 +1,9 @@
-# Símbolos
+# Sï¿½mbolos
 
-/ % != -> < > " " =
+// % != -> < > " " =
 ( ) , : . == >= <= 
 [ ] * + - 
 
 # Identificadores
 classic length Class
-identi9 hell¿$s
-
+identi9 hellï¿½$s
