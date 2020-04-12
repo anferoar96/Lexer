@@ -8,13 +8,11 @@ Done:
 - Comentarios
 
 To do:
-- Hacer pruebas de funcionamiento
+- Pruebas de funcionamiento con errores
 - Manejo de errores
 - Agregar clase y agregar objeto con atributos para no mezclar el codigo
 - Optimizar codigo
 
-Doing:
-- Pruebas de funcionamiento
 
 How to compile and run
 

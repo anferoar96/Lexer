@@ -47,12 +47,10 @@ int solve(string s,int fila,int columna){
 	        		state=1;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(regex_match(aux,numero)){
 	        		state=3;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(s[cont]=='"'){
 	        		state=4;
 	        		columna=cont;
@@ -100,6 +98,8 @@ int solve(string s,int fila,int columna){
 	        		cout<<"<tk_multi,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='+'){
 	        		cout<<"<tk_suma,"<<fila<<","<<cont+1<<">"<<endl;
+				}else if(s[cont]==','){
+					cout<<"<tk_coma,"<<fila<<","<<cont+1<<">"<<endl;
 				}else if(s[cont]=='#'){
 					cont = s.length();
 				}else if(s[cont]=='.'){
@@ -111,7 +111,8 @@ int solve(string s,int fila,int columna){
         	}
         case 1: 
         	{
-	        	while(s[cont]=='_' || regex_match(s.substr(cont,1), numletra) ){
+	        	cont++;
+				while(s[cont]=='_' || regex_match(s.substr(cont,1), numletra) ){
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}
@@ -129,7 +130,8 @@ int solve(string s,int fila,int columna){
         	}
         case 3:
         	{
-        		while(regex_match(s.substr(cont,1), numero)){
+        		cont++;
+				while(regex_match(s.substr(cont,1), numero)){
         			s2=s2+s[cont];
         			if(stol(s2)>2147483647){
         				cout<<"Error1"<<endl;
@@ -242,7 +244,7 @@ int solve(string s,int fila,int columna){
         	cout << "Usted ha ingresado una opción incorrecta";
         	cont=s.length(); //Solo para propositos de saltarme el runtime error
     	}
-    	if(s.length()-1<=cont){
+    	if(s.length()<=cont){
     		return state;
     	}
 	}
@@ -252,7 +254,7 @@ int solve(string s,int fila,int columna){
  int main()
 {
      string line;
-	 ifstream myfile ("Casos/prueba.txt");
+	 ifstream myfile ("Casos/L4.txt");
      int fila=1,col;
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){
