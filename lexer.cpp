@@ -26,6 +26,7 @@ string search(string word){
 }
 
 int solve(string s,int fila,int columna){
+	
 	int state=0;
 	string s2="";
 	int cont=-1;
@@ -39,8 +40,8 @@ int solve(string s,int fila,int columna){
         	{
 	        	cont++;
 	        	string aux=s.substr(cont,1);
-				if(int(s[cont])<32 || int(s[cont])>126){
-					cout<<"Error"<<endl;
+				
+				 if(int(s[cont])<32 || int(s[cont])>126 ){
 					cont=s.length();
 				}
 	        	if(s[cont]=='_' || regex_match(aux, letra)){
@@ -245,7 +246,7 @@ int solve(string s,int fila,int columna){
         	cout << "Usted ha ingresado una opción incorrecta";
         	cont=s.length(); //Solo para propositos de saltarme el runtime error
     	}
-    	if(s.length()<=cont){
+    	if(s.length()-1<=cont){
     		return state;
     	}
 	}
@@ -254,17 +255,18 @@ int solve(string s,int fila,int columna){
 
  int main()
 {
-     ios_base::sync_with_stdio(false);
-     cin.tie(NULL);
-     
      string line;
 	 ifstream myfile ("Casos/prueba.txt");
      int fila=1,col;
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){
-			col=1;
-     		int t=solve(line,fila,col);
-     		fila++;
+			if(line.length()==0){
+				continue;
+			}else{
+				col=1;
+     			int t=solve(line,fila,col);	
+			}	
+			fila++;
 		}
     	myfile.close();
   	}else{
