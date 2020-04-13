@@ -311,7 +311,7 @@ int solve(string s,int fila,int columna){
 		  cout<<"Unable to open file"<<endl;
 	}
 	ofstream resultado;
-	resultado.open("Resultado/"+texto);
+	resultado.open("Resultados/"+texto);
 	for(auto i:analisis){
 		resultado<<i<<'\n';
 	}
