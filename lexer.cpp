@@ -7,6 +7,7 @@
 using namespace std; 
 
 #define ll long long
+#define pb push_back
 #define rep(i,n) for (int i = 0; i < n; i++)
 
 vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
@@ -14,6 +15,7 @@ vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async",
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
 "with","yield","int","str","object","bool","self","print","len"}; 
 
+vector<string> analisis;
 
 
 string search(string word){
@@ -29,6 +31,7 @@ int solve(string s,int fila,int columna){
 	
 	int state=0;
 	string s2="";
+	string res;
 	int cont=-1;
 	regex letra("[a-zA-Z]");
 	regex numero("[0-9]");
@@ -43,7 +46,8 @@ int solve(string s,int fila,int columna){
 				 if(int(s[cont])<32 || int(s[cont])>126 ){
 					if(s[cont]== '\0'){
 					}else{
-						cout<<">>>Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;  
+						res=">>>Error léxico(linea:"+to_string(fila)+",posicion:"+to_string(cont+1)+")";
+						analisis.pb(res);
 						return -1;
 					}
 				}
@@ -84,27 +88,37 @@ int solve(string s,int fila,int columna){
 	        		columna=cont;
 	        		s2=s2+s[cont];
 	        	}else if(s[cont]=='('){ 
-	        		cout<<"<tk_par_izq,"<<fila<<","<<cont+1<<">"<<endl;
+					res = "<tk_par_izq,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 	        	}else if(s[cont]==')'){
-	        		cout<<"<tk_par_der,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_par_der,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 	        	}else if(s[cont]==':'){
-	        		cout<<"<tk_dos_puntos,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_dos_puntos,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 	        	}else if(s[cont]=='%'){
-	        		cout<<"<tk_modulo,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_modulo,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 	        	}else if(s[cont]=='['){
-					cout<<"<tk_corch_izq,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_corch_izq,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 				}else if(s[cont]==']'){
-					cout<<"<tk_corch_der,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_corch_der,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 				}else if(s[cont]=='*'){
-	        		cout<<"<tk_multi,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_multi,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 	        	}else if(s[cont]=='+'){
-	        		cout<<"<tk_suma,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_suma,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 				}else if(s[cont]==','){
-					cout<<"<tk_coma,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_coma,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 				}else if(s[cont]=='#'){
 					cont = s.length();
 				}else if(s[cont]=='.'){
-	        		cout<<"<tk_punto,"<<fila<<","<<cont+1<<">"<<endl;
+					res= "<tk_punto,"+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
 	        	}else if(s[cont]==' '){
 	        	}
 	        	break;
@@ -119,9 +133,11 @@ int solve(string s,int fila,int columna){
 	        	cont--;
 	        	string key=search(s2); //Retornar la string
 	        	if(key.empty()){
-	        		cout<<"<id,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
+					res= "<id,"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
 	        	}else{
-	        		cout<<"<"<<key<<","<<fila<<","<<columna+1<<">"<<endl;
+					res= "<"+key+","+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
 	        	}
 	        	state=0;
 	        	s2="";
@@ -133,13 +149,15 @@ int solve(string s,int fila,int columna){
 				while(regex_match(s.substr(cont,1), numero)){
         			s2=s2+s[cont];
         			if(stol(s2)>2147483647){
-        				cout<<">>>Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
+						res= ">>>Error léxico(linea:"+to_string(fila)+",posicion:"+to_string(cont+1)+")";
+	        			analisis.pb(res);
         				return -1;
         			}
         			cont++;
         		}
         		cont--;
-				cout<<"<tk_entero,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
+				res= "<tk_entero,"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
+	        	analisis.pb(res);
         		state=0;
         		s2="";
 
@@ -156,9 +174,11 @@ int solve(string s,int fila,int columna){
 						break;
 					}
     			}
-    			cout<<"<tk_cadena,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
+				res= "<tk_cadena,"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
+	        	analisis.pb(res);
 				if(int(s[cont])<32 || int(s[cont])>126){
-					cout<<">>>Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
+					res= ">>>Error léxico(linea:"+to_string(fila)+",posicion:"+to_string(cont+1)+")";
+	        		analisis.pb(res);
 					return -1;
 				}
     			state=0;
@@ -170,9 +190,11 @@ int solve(string s,int fila,int columna){
 				cont++;
     			if(s[cont]=='='){
 					s2=s2+s[cont];
-    				cout<<"<tk_igual_igual,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_igual_igual,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     			}else{
-    				cout<<"<tk_asig,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_asig,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
 					cont--;
     			}
     			state=0;
@@ -184,9 +206,11 @@ int solve(string s,int fila,int columna){
 				cont++;
     			if(s[cont]=='>'){
     				s2=s2+s[cont];
-    				cout<<"<tk_ejecuta,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_ejecuta,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     			}else{
-    				cout<<"<tk_neg,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_neg,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     				cont--;
     			}
     			state=0;
@@ -198,7 +222,8 @@ int solve(string s,int fila,int columna){
     			cont++;
 				if(s[cont]=='/'){
     				s2=s2+s[cont];
-    				cout<<"<tk_division,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_division,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     			}
     			state=0;
     			s2="";
@@ -209,7 +234,8 @@ int solve(string s,int fila,int columna){
     			cont++;
 				if(s[cont]=='='){
     				s2=s2+s[cont];
-    				cout<<"<tk_distinto,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_distinto,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     			}
     			state=0;
     			s2="";
@@ -220,10 +246,12 @@ int solve(string s,int fila,int columna){
     			cont++;
 				if(s[cont]=='='){
     				s2=s2+s[cont];
-    				cout<<"<tk_mayor_igual,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_mayor_igual,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     			}else{
     				s2=s2+s[cont];
-    				cout<<"<tk_mayor,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_mayor,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     				cont--;
     			}
     			state=0;
@@ -235,10 +263,12 @@ int solve(string s,int fila,int columna){
     			cont++;
 				if(s[cont]=='='){
     				s2=s2+s[cont];
-    				cout<<"<tk_menor_igual,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_menor_igual,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     			}else{
     				s2=s2+s[cont];
-    				cout<<"<tk_menor,"<<fila<<","<<columna+1<<">"<<endl;
+					res= "<tk_menor,"+to_string(fila)+","+to_string(columna+1)+">";
+	        		analisis.pb(res);
     				cont--;
     			}
     			state=0;
@@ -256,10 +286,13 @@ int solve(string s,int fila,int columna){
 }
 
 
- int main()
+ int main(int argc, char *argv[])
 {
      string line;
-	 ifstream myfile ("Casos/L4.txt");
+	 string texto=argv[1];
+	 string res="Casos/"+texto;
+	 ifstream myfile (res);
+
      int fila=1,col;
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){
@@ -275,8 +308,13 @@ int solve(string s,int fila,int columna){
 		}
     	myfile.close();
   	}else{
-		  cout << "Unable to open file"<<endl; 
+		  cout<<"Unable to open file"<<endl;
 	}
-   
+	ofstream resultado;
+	resultado.open("Resultado/"+texto);
+	for(auto i:analisis){
+		resultado<<i<<'\n';
+	}
+	resultado.close();
      return 0;
 }
