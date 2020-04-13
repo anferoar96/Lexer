@@ -12,7 +12,7 @@ using namespace std;
 vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
-"with","yield","int","str","object","bool","self","print","len"}; //Object,bool,self,print no son reservadas pera segun eso se manejan asi
+"with","yield","int","str","object","bool","self","print","len"}; 
 
 
 
@@ -42,9 +42,8 @@ int solve(string s,int fila,int columna){
 	        	string aux=s.substr(cont,1);
 				 if(int(s[cont])<32 || int(s[cont])>126 ){
 					if(s[cont]== '\0'){
-						cont=s.length();
 					}else{
-						cout<<"Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;  //>>> Error léxico(linea:X,posicion:Y)
+						cout<<">>>Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;  
 						return -1;
 					}
 				}
@@ -60,38 +59,31 @@ int solve(string s,int fila,int columna){
 	        		state=4;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(s[cont]=='='){
 	        		state=5;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(s[cont]=='-'){
 	        		state=6;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(s[cont]=='/'){
 	        		state=7;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(s[cont]=='!'){
 	        		state=8;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(s[cont]=='>'){
 	        		state=9;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
 	        	}else if(s[cont]=='<'){
 	        		state=10;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        		cont++;
-	        	}else if(s[cont]=='('){ //Suponiendo que (( seguidos son dos tk_par_izq
+	        	}else if(s[cont]=='('){ 
 	        		cout<<"<tk_par_izq,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]==')'){
 	        		cout<<"<tk_par_der,"<<fila<<","<<cont+1<<">"<<endl;
@@ -99,7 +91,11 @@ int solve(string s,int fila,int columna){
 	        		cout<<"<tk_dos_puntos,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='%'){
 	        		cout<<"<tk_modulo,"<<fila<<","<<cont+1<<">"<<endl;
-	        	}else if(s[cont]=='*'){
+	        	}else if(s[cont]=='['){
+					cout<<"<tk_corch_izq,"<<fila<<","<<cont+1<<">"<<endl;
+				}else if(s[cont]==']'){
+					cout<<"<tk_corch_der,"<<fila<<","<<cont+1<<">"<<endl;
+				}else if(s[cont]=='*'){
 	        		cout<<"<tk_multi,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]=='+'){
 	        		cout<<"<tk_suma,"<<fila<<","<<cont+1<<">"<<endl;
@@ -110,7 +106,6 @@ int solve(string s,int fila,int columna){
 				}else if(s[cont]=='.'){
 	        		cout<<"<tk_punto,"<<fila<<","<<cont+1<<">"<<endl;
 	        	}else if(s[cont]==' '){
-	        		continue;
 	        	}
 	        	break;
         	}
@@ -122,7 +117,6 @@ int solve(string s,int fila,int columna){
 	        		cont++;
 	        	}
 	        	cont--;
-	        	//cout<<s2<<endl;
 	        	string key=search(s2); //Retornar la string
 	        	if(key.empty()){
 	        		cout<<"<id,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
@@ -139,7 +133,7 @@ int solve(string s,int fila,int columna){
 				while(regex_match(s.substr(cont,1), numero)){
         			s2=s2+s[cont];
         			if(stol(s2)>2147483647){
-        				cout<<"Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
+        				cout<<">>>Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
         				return -1;
         			}
         			cont++;
@@ -153,6 +147,7 @@ int solve(string s,int fila,int columna){
     		}
     	case 4:
     		{
+				cont++;
 				while((int(s[cont])>=32 && int(s[cont])<=126) ){ 
 					s2=s2+s[cont];
     				cont++;
@@ -162,8 +157,8 @@ int solve(string s,int fila,int columna){
 					}
     			}
     			cout<<"<tk_cadena,"<<s2<<","<<fila<<","<<columna+1<<">"<<endl;
-				if(int(s[cont])<32 || s[cont]>126){
-					cout<<"Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
+				if(int(s[cont])<32 || int(s[cont])>126){
+					cout<<">>>Error léxico(linea:"<<fila<<",posicion:"<<cont+1<<")"<<endl;
 					return -1;
 				}
     			state=0;
@@ -172,11 +167,13 @@ int solve(string s,int fila,int columna){
     		}
     	 case 5:
     		{
+				cont++;
     			if(s[cont]=='='){
+					s2=s2+s[cont];
     				cout<<"<tk_igual_igual,"<<fila<<","<<columna+1<<">"<<endl;
-    				cont--;
     			}else{
     				cout<<"<tk_asig,"<<fila<<","<<columna+1<<">"<<endl;
+					cont--;
     			}
     			state=0;
     			s2="";
@@ -184,6 +181,7 @@ int solve(string s,int fila,int columna){
     		}
     	case 6:
     		{
+				cont++;
     			if(s[cont]=='>'){
     				s2=s2+s[cont];
     				cout<<"<tk_ejecuta,"<<fila<<","<<columna+1<<">"<<endl;
@@ -197,7 +195,8 @@ int solve(string s,int fila,int columna){
     		}
     	case 7:
     		{
-    			if(s[cont]=='/'){
+    			cont++;
+				if(s[cont]=='/'){
     				s2=s2+s[cont];
     				cout<<"<tk_division,"<<fila<<","<<columna+1<<">"<<endl;
     			}
@@ -207,7 +206,8 @@ int solve(string s,int fila,int columna){
     		}
     	case 8:
     		{
-    			if(s[cont]=='='){
+    			cont++;
+				if(s[cont]=='='){
     				s2=s2+s[cont];
     				cout<<"<tk_distinto,"<<fila<<","<<columna+1<<">"<<endl;
     			}
@@ -217,7 +217,8 @@ int solve(string s,int fila,int columna){
     		}
     	 case 9:
     		{
-    			if(s[cont]=='='){
+    			cont++;
+				if(s[cont]=='='){
     				s2=s2+s[cont];
     				cout<<"<tk_mayor_igual,"<<fila<<","<<columna+1<<">"<<endl;
     			}else{
@@ -231,7 +232,8 @@ int solve(string s,int fila,int columna){
     		}
     	case 10:
     		{
-    			if(s[cont]=='='){
+    			cont++;
+				if(s[cont]=='='){
     				s2=s2+s[cont];
     				cout<<"<tk_menor_igual,"<<fila<<","<<columna+1<<">"<<endl;
     			}else{
@@ -245,7 +247,7 @@ int solve(string s,int fila,int columna){
     		}
         default: 
         	cout << "Usted ha ingresado una opción incorrecta";
-        	cont=s.length(); //Solo para propositos de saltarme el runtime error
+        	cont=s.length(); 
     	}
     	if(s.length()<=cont){
     		return state;
@@ -257,7 +259,7 @@ int solve(string s,int fila,int columna){
  int main()
 {
      string line;
-	 ifstream myfile ("Casos/L2.txt");
+	 ifstream myfile ("Casos/L4.txt");
      int fila=1,col;
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){
