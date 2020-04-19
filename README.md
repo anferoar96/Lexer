@@ -20,4 +20,3 @@ En ambas formas los resultados son guardados en en la carpeta Resultados. Esta c
 
 ### Nota:
 - Los archivos de prueba   fueron creados en windows y por problemas de compactibilidad con linux toca convertirlos a unix antes de correr el codigo, esto se realizo con ayuda de una utilidad para linux llamada dos2unix. El problema en cuestion es conocido como End of the Line(EOL) y consiste en que en Windows en los archivos para el final de linea utiliza "\r\n" mientras que en Linux se usa "\n".
-- Aun no ha sido posible realizar pruebas de funcionamiento del programa en un ambiente Windows
