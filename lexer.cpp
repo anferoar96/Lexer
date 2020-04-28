@@ -3,6 +3,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <set>
+#include <map>
 
 using namespace std; 
 
@@ -10,22 +12,26 @@ using namespace std;
 #define pb push_back
 #define rep(i,n) for (int i = 0; i < n; i++)
 
-vector<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
+set<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
 "with","yield","int","str","object","bool","self","print","len"}; 
 
 vector<string> analisis;
 
+map<char,string> solo={
+	{'(',"tk_par_izq"},
+	{')',"tk_par_der"},
+	{':',"tk_dos_puntos"},
+	{'%',"tk_modulo"},
+	{'[',"tk_corch_izq"},
+	{']',"tk_corch_der"},
+	{'*',"tk_multi"},
+	{'+',"tk_suma"},
+	{',',"tk_coma"},
+	{'.',"tk_punto"},
+};
 
-string search(string word){
-	for(auto i:keywords){
-		if(i==word){
-			return i;
-		}
-	}
-	return "";
-}
 
 int solve(string s,int fila,int columna){
 	
@@ -51,7 +57,12 @@ int solve(string s,int fila,int columna){
 						return -1;
 					}
 				}
-	        	if(s[cont]=='_' || regex_match(aux, letra)){
+
+				auto itr =solo.find(s[cont]);
+				if(itr!=solo.end()){
+					res = "<"+itr->second+","+to_string(fila)+","+to_string(cont+1)+">";
+	        		analisis.pb(res);
+				}else if(s[cont]=='_' || regex_match(aux, letra)){
 	        		state=1;
 	        		columna=cont;
 	        		s2=s2+s[cont];
@@ -87,38 +98,8 @@ int solve(string s,int fila,int columna){
 	        		state=10;
 	        		columna=cont;
 	        		s2=s2+s[cont];
-	        	}else if(s[cont]=='('){ 
-					res = "<tk_par_izq,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-	        	}else if(s[cont]==')'){
-					res= "<tk_par_der,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-	        	}else if(s[cont]==':'){
-					res= "<tk_dos_puntos,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-	        	}else if(s[cont]=='%'){
-					res= "<tk_modulo,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-	        	}else if(s[cont]=='['){
-					res= "<tk_corch_izq,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-				}else if(s[cont]==']'){
-					res= "<tk_corch_der,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-				}else if(s[cont]=='*'){
-					res= "<tk_multi,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-	        	}else if(s[cont]=='+'){
-					res= "<tk_suma,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-				}else if(s[cont]==','){
-					res= "<tk_coma,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
-				}else if(s[cont]=='#'){
+	        	}else if(s[cont]=='#'){
 					cont = s.length();
-				}else if(s[cont]=='.'){
-					res= "<tk_punto,"+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
 	        	}else if(s[cont]==' '){
 	        	}
 	        	break;
@@ -131,12 +112,12 @@ int solve(string s,int fila,int columna){
 	        		cont++;
 	        	}
 	        	cont--;
-	        	string key=search(s2); //Retornar la string
-	        	if(key.empty()){
+	        	auto key=keywords.find(s2); //Retornar la string
+	        	if(key == keywords.end()){
 					res= "<id,"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
 	        		analisis.pb(res);
 	        	}else{
-					res= "<"+key+","+to_string(fila)+","+to_string(columna+1)+">";
+					res= "<"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
 	        		analisis.pb(res);
 	        	}
 	        	state=0;
