@@ -2,15 +2,14 @@
 #include <regex>
 #include <fstream>
 #include <string>
+#include <string.h>
 #include <vector>
 #include <set>
 #include <map>
 
 using namespace std; 
 
-#define ll long long
 #define pb push_back
-#define rep(i,n) for (int i = 0; i < n; i++)
 
 set<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
@@ -277,7 +276,7 @@ int solve(string s,int fila,int columna){
  int main(int argc, char *argv[])
 {
      string line;
-	 string texto=argv[1];
+	 string texto=argv[2];
 	 string res="Casos/"+texto;
 	 ifstream myfile (res);
 
@@ -300,17 +299,31 @@ int solve(string s,int fila,int columna){
 		  cout<<"Unable to open file"<<endl;
 	}
 	ofstream resultado;
-	resultado.open("Resultados/"+texto);
-	for(auto i:analisis){
-		if(i.id=="error" && i.info=="error"){
-			resultado<<">>> Error lexico (linea: "<<i.fila<<",posicion:"<<i.col<<")"<<'\n';
-		}else if(i.info==""){
-			resultado<<"<"<<i.id<<","<<i.fila<<","<<i.col<<">"<<'\n';
-		}else{
-			resultado<<"<"<<i.id<<","<<i.info<<","<<i.fila<<","<<i.col<<">"<<'\n';
+	if(strcmp(argv[1], "1") == 0){
+		resultado.open("Resultados/"+texto);
+		for(auto i:analisis){
+			if(i.id=="error" && i.info=="error"){
+				resultado<<">>> Error lexico (linea: "<<i.fila<<",posicion:"<<i.col<<")"<<'\n';
+			}else if(i.info==""){
+				resultado<<"<"<<i.id<<","<<i.fila<<","<<i.col<<">"<<'\n';
+			}else{
+				resultado<<"<"<<i.id<<","<<i.info<<","<<i.fila<<","<<i.col<<">"<<'\n';
+			}
+			
 		}
-		
+	}else if(strcmp(argv[1], "2") == 0){
+		resultado.open("Resultados/"+texto);
+		if(analisis.back().id=="error" && analisis.back().info=="error"){
+			resultado<<">>> Error lexico (linea: "<<analisis.back().fila<<",posicion:"<<analisis.back().col<<")"<<'\n';
+		}else{
+			resultado<<"In progress"<<'\n';
+		}
+	}else if(strcmp(argv[1], "3") == 0){
+		cout<<"Option no valid"<<endl;
+	}else{
+		cout<<"Option no valid"<<endl;
 	}
+	
 	resultado.close();
      return 0;
 }
