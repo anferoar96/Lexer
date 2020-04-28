@@ -41,6 +41,13 @@ struct token
 
 vector<token> analisis;
 
+//Compatibilidad con windows
+string& rtrim(string& str, const string& chars = "\t\n\v\f\r ")
+{
+    str.erase(str.find_last_not_of(chars) + 1);
+    return str;
+}
+
 int solve(string s,int fila,int columna){
 	
 	int state=0;
@@ -277,6 +284,7 @@ int solve(string s,int fila,int columna){
      int fila=1,col;
 	if (myfile.is_open()){
 		while ( getline (myfile,line) ){
+			line=rtrim(line);
 			if(line.length()==0){
 			}else{
 				col=1;

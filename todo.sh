@@ -8,7 +8,7 @@ else
     mkdir Resultados
 fi
 
-for caso in L0.txt L1.txt L2.txt L3.txt L4.txt
+for caso in 0.txt 1.txt 2.txt 3.txt 4.txt
 do
     ./lexer $caso
 done
