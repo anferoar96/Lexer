@@ -17,8 +17,6 @@ set<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "a
 "if", "import", "in","is","lambda","nonlocal","not","or","pass","raise","return","try","while",
 "with","yield","int","str","object","bool","self","print","len"}; 
 
-vector<string> analisis;
-
 map<char,string> solo={
 	{'(',"tk_par_izq"},
 	{')',"tk_par_der"},
@@ -32,6 +30,16 @@ map<char,string> solo={
 	{'.',"tk_punto"},
 };
 
+struct token
+{
+	string id;
+	string info;
+	int fila;
+	int col;
+}ob;
+
+
+vector<token> analisis;
 
 int solve(string s,int fila,int columna){
 	
@@ -52,16 +60,16 @@ int solve(string s,int fila,int columna){
 				 if(int(s[cont])<32 || int(s[cont])>126 ){
 					if(s[cont]== '\0'){
 					}else{
-						res=">>>Error léxico(linea:"+to_string(fila)+",posicion:"+to_string(cont+1)+")";
-						analisis.pb(res);
+						ob={"error","error",fila,cont+1};
+						analisis.pb(ob);
 						return -1;
 					}
 				}
 
 				auto itr =solo.find(s[cont]);
 				if(itr!=solo.end()){
-					res = "<"+itr->second+","+to_string(fila)+","+to_string(cont+1)+">";
-	        		analisis.pb(res);
+					ob={itr->second,"",fila,cont+1};
+	        		analisis.pb(ob);
 				}else if(s[cont]=='_' || regex_match(aux, letra)){
 	        		state=1;
 	        		columna=cont;
@@ -114,11 +122,11 @@ int solve(string s,int fila,int columna){
 	        	cont--;
 	        	auto key=keywords.find(s2); //Retornar la string
 	        	if(key == keywords.end()){
-					res= "<id,"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={"id",s2,fila,columna+1};
+	        		analisis.pb(ob);
 	        	}else{
-					res= "<"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={s2,"",fila,columna+1};
+	        		analisis.pb(ob);
 	        	}
 	        	state=0;
 	        	s2="";
@@ -130,15 +138,15 @@ int solve(string s,int fila,int columna){
 				while(regex_match(s.substr(cont,1), numero)){
         			s2=s2+s[cont];
         			if(stol(s2)>2147483647){
-						res= ">>>Error léxico(linea:"+to_string(fila)+",posicion:"+to_string(cont+1)+")";
-	        			analisis.pb(res);
+						ob={"error","error",fila,cont+1};
+	        			analisis.pb(ob);
         				return -1;
         			}
         			cont++;
         		}
         		cont--;
-				res= "<tk_entero,"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
-	        	analisis.pb(res);
+				ob={"tk_entero",s2,fila,columna+1};
+	        	analisis.pb(ob);
         		state=0;
         		s2="";
 
@@ -155,11 +163,11 @@ int solve(string s,int fila,int columna){
 						break;
 					}
     			}
-				res= "<tk_cadena,"+s2+","+to_string(fila)+","+to_string(columna+1)+">";
-	        	analisis.pb(res);
+				ob={"tk_cadena",s2,fila,columna+1};
+	        	analisis.pb(ob);
 				if(int(s[cont])<32 || int(s[cont])>126){
-					res= ">>>Error léxico(linea:"+to_string(fila)+",posicion:"+to_string(cont+1)+")";
-	        		analisis.pb(res);
+					ob={"error","error",fila,cont+1};
+	        		analisis.pb(ob);
 					return -1;
 				}
     			state=0;
@@ -170,12 +178,11 @@ int solve(string s,int fila,int columna){
     		{
 				cont++;
     			if(s[cont]=='='){
-					s2=s2+s[cont];
-					res= "<tk_igual_igual,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={"tk_igual_igual","",fila,columna+1};
+	        		analisis.pb(ob);
     			}else{
-					res= "<tk_asig,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={"tk_asig","",fila,columna+1};
+	        		analisis.pb(ob);
 					cont--;
     			}
     			state=0;
@@ -186,12 +193,11 @@ int solve(string s,int fila,int columna){
     		{
 				cont++;
     			if(s[cont]=='>'){
-    				s2=s2+s[cont];
-					res= "<tk_ejecuta,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={"tk_ejecuta","",fila,columna};
+	        		analisis.pb(ob);
     			}else{
-					res= "<tk_neg,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={"tk_neg","",fila,columna+1};
+	        		analisis.pb(ob);
     				cont--;
     			}
     			state=0;
@@ -202,9 +208,8 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='/'){
-    				s2=s2+s[cont];
-					res= "<tk_division,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+    				ob={"tk_division","",fila,columna+1};
+	        		analisis.pb(ob);
     			}
     			state=0;
     			s2="";
@@ -214,9 +219,8 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='='){
-    				s2=s2+s[cont];
-					res= "<tk_distinto,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={"tk_distinto","",fila,columna+1};
+	        		analisis.pb(ob);
     			}
     			state=0;
     			s2="";
@@ -226,13 +230,11 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='='){
-    				s2=s2+s[cont];
-					res= "<tk_mayor_igual,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+    				ob={"tk_mayor_igual","",fila,columna+1};
+	        		analisis.pb(ob);
     			}else{
-    				s2=s2+s[cont];
-					res= "<tk_mayor,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+					ob={"tk_mayor","",fila,columna+1};
+	        		analisis.pb(ob);
     				cont--;
     			}
     			state=0;
@@ -243,13 +245,11 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='='){
-    				s2=s2+s[cont];
-					res= "<tk_menor_igual,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+    				ob={"tk_menor_igual","",fila,columna+1};
+	        		analisis.pb(ob);
     			}else{
-    				s2=s2+s[cont];
-					res= "<tk_menor,"+to_string(fila)+","+to_string(columna+1)+">";
-	        		analisis.pb(res);
+    				ob={"tk_menor","",fila,columna+1};
+	        		analisis.pb(ob);
     				cont--;
     			}
     			state=0;
@@ -294,7 +294,14 @@ int solve(string s,int fila,int columna){
 	ofstream resultado;
 	resultado.open("Resultados/"+texto);
 	for(auto i:analisis){
-		resultado<<i<<'\n';
+		if(i.id=="error" && i.info=="error"){
+			resultado<<">>> Error lexico (linea: "<<i.fila<<",posicion:"<<i.col<<")"<<'\n';
+		}else if(i.info==""){
+			resultado<<"<"<<i.id<<","<<i.fila<<","<<i.col<<">"<<'\n';
+		}else{
+			resultado<<"<"<<i.id<<","<<i.info<<","<<i.fila<<","<<i.col<<">"<<'\n';
+		}
+		
 	}
 	resultado.close();
      return 0;
