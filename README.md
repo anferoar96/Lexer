@@ -20,4 +20,6 @@ Se puede llevar a cabo por medio de 2 formas:
 En ambas formas los resultados son guardados en en la carpeta Resultados. Esta carpeta se crea automaticamente con el script de todo.sh en caso de que se realize el testeo por el metodo 1 toca verificar que se encuentre creada la carpeta correspondiente
 
 ### Nota:
+
 - Aun no ha sido posible realizar pruebas de funcionamiento del programa en un ambiente Windows
+
