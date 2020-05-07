@@ -1,9 +1,9 @@
 # Lexer
 
-Repositorio con el analizador lexico de Chocopy creado en C++
+Repositorio con el analizador lexico y sintactico de Chocopy creado en C++
 
 ### La estructura del lexer es la siguiente:
-- Carpeta casos: Donde estan los casos dados por el profesor y los mismos archivos convertidos por problemas EOL(Ver nota)
+- Carpeta casos: Donde estan los casos dados por el profesor 
 - Carpeta  respuesta: Es la respuesta sacada manualmente de los casos. Esto se hizo con motivo de comparar con el resultado automatica y asi verificar que este correcto el codigo
 - Carpeta resultados: Es donde se guardan los resultados del analisis lexico realizado automaticamente
 - lexer.cpp: Archivo con el codigo del analizador lexico
@@ -13,11 +13,11 @@ Repositorio con el analizador lexico de Chocopy creado en C++
 
 ### Compilacion y ejecucion
 Se puede llevar a cabo por medio de 2 formas:
-1. Usando el comando **make** o **g++ --std=c++11 lexer.cpp -o lexer** para el proceso de compilacion y para la ejecucion con el comando **./lexer L1.txt** donde el L1.txt es el archivo 1 de los casos de prueba.
-2. Si por el contrario se desea probar todos los casos de pruebas basta con usar el comando **chmod +x todo.sh** para darle permisos y despues el comando **./todo.sh**  para ejecutarlo. O como alternativa se puede usar el comando **sh todo.sh** que no requiere permisos.
+1. Usando el comando **make** o **g++ --std=c++11 lexer.cpp -o lexer** para el proceso de compilacion y para la ejecucion con el comando **./lexer var 1.txt** donde el 1.txt es el archivo 1 de los casos de prueba y el **var** es para identificar si el usuario desea realizar un analisis lexico(1) o un analisis sintantico(2). Por ejemplo si se desea realizar un analisis lexico al archivo 2 la instruccion quedaria de la siguiente manera **./lexer 1 2.txt**
 
-En ambas formas los resultados son guardados en en la carpeta Resultados. Esta carpeta se crea automaticamente con el script de todo.sh en caso de que se realize el testeo por el metodo 1 toca verificar que se encuentre creada la carpeta.
+2. Si por el contrario se desea probar todos los casos de pruebas basta con usar el comando **chmod +x todo.sh** para darle permisos y despues el comando **./todo.sh var**  para ejecutarlo, donde **var** indica si se desea hacer un analisis lexico(1) o un analisis sintactico(2). O como alternativa se puede usar el comando **sh todo.sh var** que no requiere permisos.
+
+En ambas formas los resultados son guardados en en la carpeta Resultados. Esta carpeta se crea automaticamente con el script de todo.sh en caso de que se realize el testeo por el metodo 1 toca verificar que se encuentre creada la carpeta correspondiente
 
 ### Nota:
-- Los archivos de prueba   fueron creados en windows y por problemas de compactibilidad con linux toca convertirlos a unix antes de correr el codigo, esto se realizo con ayuda de una utilidad para linux llamada dos2unix. El problema en cuestion es conocido como End of the Line(EOL) y consiste en que en Windows en los archivos para el final de linea utiliza "\r\n" mientras que en Linux se usa "\n".
 - Aun no ha sido posible realizar pruebas de funcionamiento del programa en un ambiente Windows

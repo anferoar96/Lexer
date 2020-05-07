@@ -288,6 +288,12 @@ int solve(string s,int fila,int columna){
 			}else{
 				col=1;
      			int t=solve(line,fila,col);	
+				if(analisis.size()>0){
+					if(analisis[analisis.size()-1].id!="NEWLINE"){
+						ob={"NEWLINE","",-1,-1};
+						analisis.pb(ob);
+					}
+				}
 				if(t==-1){
 					break;
 				}
@@ -299,9 +305,11 @@ int solve(string s,int fila,int columna){
 		  cout<<"Unable to open file"<<endl;
 	}
 	ofstream resultado;
+	resultado.open("Resultados/"+texto);
 	if(strcmp(argv[1], "1") == 0){
-		resultado.open("Resultados/"+texto);
 		for(auto i:analisis){
+			//if(i.id=="NEWLINE"){
+			//}else
 			if(i.id=="error" && i.info=="error"){
 				resultado<<">>> Error lexico (linea: "<<i.fila<<",posicion:"<<i.col<<")"<<'\n';
 			}else if(i.info==""){
@@ -312,9 +320,9 @@ int solve(string s,int fila,int columna){
 			
 		}
 	}else if(strcmp(argv[1], "2") == 0){
-		resultado.open("Resultados/"+texto);
-		if(analisis.back().id=="error" && analisis.back().info=="error"){
-			resultado<<">>> Error lexico (linea: "<<analisis.back().fila<<",posicion:"<<analisis.back().col<<")"<<'\n';
+		int var1=analisis.size()-2;
+		if(analisis[var1].id=="error" && analisis[var1].info=="error"){
+			resultado<<">>> Error lexico (linea: "<<analisis[var1].fila<<",posicion:"<<analisis[var1].col<<")"<<'\n';
 		}else{
 			resultado<<"In progress"<<'\n';
 		}
