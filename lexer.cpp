@@ -2,15 +2,14 @@
 #include <regex>
 #include <fstream>
 #include <string>
+#include <string.h>
 #include <vector>
 #include <set>
 #include <map>
 
 using namespace std; 
 
-#define ll long long
 #define pb push_back
-#define rep(i,n) for (int i = 0; i < n; i++)
 
 set<string> keywords{"False", "None", "True", "and", "as", "assert", "async", "await", "break", 
 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", 
@@ -277,7 +276,7 @@ int solve(string s,int fila,int columna){
  int main(int argc, char *argv[])
 {
      string line;
-	 string texto=argv[1];
+	 string texto=argv[2];
 	 string res="Casos/"+texto;
 	 ifstream myfile (res);
 
@@ -289,6 +288,12 @@ int solve(string s,int fila,int columna){
 			}else{
 				col=1;
      			int t=solve(line,fila,col);	
+				if(analisis.size()>0){
+					if(analisis[analisis.size()-1].id!="NEWLINE"){
+						ob={"NEWLINE","",-1,-1};
+						analisis.pb(ob);
+					}
+				}
 				if(t==-1){
 					break;
 				}
@@ -301,16 +306,32 @@ int solve(string s,int fila,int columna){
 	}
 	ofstream resultado;
 	resultado.open("Resultados/"+texto);
-	for(auto i:analisis){
-		if(i.id=="error" && i.info=="error"){
-			resultado<<">>> Error lexico (linea: "<<i.fila<<",posicion:"<<i.col<<")"<<'\n';
-		}else if(i.info==""){
-			resultado<<"<"<<i.id<<","<<i.fila<<","<<i.col<<">"<<'\n';
-		}else{
-			resultado<<"<"<<i.id<<","<<i.info<<","<<i.fila<<","<<i.col<<">"<<'\n';
+	if(strcmp(argv[1], "1") == 0){
+		for(auto i:analisis){
+			//if(i.id=="NEWLINE"){
+			//}else
+			if(i.id=="error" && i.info=="error"){
+				resultado<<">>> Error lexico (linea: "<<i.fila<<",posicion:"<<i.col<<")"<<'\n';
+			}else if(i.info==""){
+				resultado<<"<"<<i.id<<","<<i.fila<<","<<i.col<<">"<<'\n';
+			}else{
+				resultado<<"<"<<i.id<<","<<i.info<<","<<i.fila<<","<<i.col<<">"<<'\n';
+			}
+			
 		}
-		
+	}else if(strcmp(argv[1], "2") == 0){
+		int var1=analisis.size()-2;
+		if(analisis[var1].id=="error" && analisis[var1].info=="error"){
+			resultado<<">>> Error lexico (linea: "<<analisis[var1].fila<<",posicion:"<<analisis[var1].col<<")"<<'\n';
+		}else{
+			resultado<<"In progress"<<'\n';
+		}
+	}else if(strcmp(argv[1], "3") == 0){
+		cout<<"Option no valid"<<endl;
+	}else{
+		cout<<"Option no valid"<<endl;
 	}
+	
 	resultado.close();
      return 0;
 }

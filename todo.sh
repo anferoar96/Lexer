@@ -10,5 +10,5 @@ fi
 
 for caso in 0.txt 1.txt 2.txt 3.txt 4.txt
 do
-    ./lexer $caso
+    ./lexer $1 $caso
 done
