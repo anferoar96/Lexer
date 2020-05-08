@@ -1,8 +1,8 @@
-# Lexer
+# Chocopy
 
 Repositorio con el analizador lexico y sintactico de Chocopy creado en C++
 
-### La estructura del lexer es la siguiente:
+### La estructura del proyecto es la siguiente:
 - Carpeta casos: Donde estan los casos dados por el profesor 
 - Carpeta  respuesta: Es la respuesta sacada manualmente de los casos. Esto se hizo con motivo de comparar con el resultado automatica y asi verificar que este correcto el codigo
 - Carpeta resultados: Es donde se guardan los resultados del analisis lexico realizado automaticamente
