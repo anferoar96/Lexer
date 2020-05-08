@@ -1,3 +1,4 @@
+#include "parser.h"
 #include <iostream>
 #include <regex>
 #include <fstream>
@@ -6,6 +7,8 @@
 #include <vector>
 #include <set>
 #include <map>
+//#include <sys/stat.h> 
+//#include <sys/types.h> 
 
 using namespace std; 
 
@@ -29,16 +32,8 @@ map<char,string> solo={
 	{'.',"tk_punto"},
 };
 
-struct token
-{
-	string id;
-	string info;
-	int fila;
-	int col;
-}ob;
 
-
-vector<token> analisis;
+vector<Token> analisis;
 
 //Compatibilidad con windows
 string& rtrim(string& str, const string& chars = "\t\n\v\f\r ")
@@ -66,6 +61,7 @@ int solve(string s,int fila,int columna){
 				 if(int(s[cont])<32 || int(s[cont])>126 ){
 					if(s[cont]== '\0'){
 					}else{
+						Token ob;
 						ob={"error","error",fila,cont+1};
 						analisis.pb(ob);
 						return -1;
@@ -74,7 +70,7 @@ int solve(string s,int fila,int columna){
 
 				auto itr =solo.find(s[cont]);
 				if(itr!=solo.end()){
-					ob={itr->second,"",fila,cont+1};
+					Token ob={itr->second,"",fila,cont+1};
 	        		analisis.pb(ob);
 				}else if(s[cont]=='_' || regex_match(aux, letra)){
 	        		state=1;
@@ -128,10 +124,10 @@ int solve(string s,int fila,int columna){
 	        	cont--;
 	        	auto key=keywords.find(s2); //Retornar la string
 	        	if(key == keywords.end()){
-					ob={"id",s2,fila,columna+1};
+					Token ob={"id",s2,fila,columna+1};
 	        		analisis.pb(ob);
 	        	}else{
-					ob={s2,"",fila,columna+1};
+					Token ob={s2,"",fila,columna+1};
 	        		analisis.pb(ob);
 	        	}
 	        	state=0;
@@ -144,14 +140,14 @@ int solve(string s,int fila,int columna){
 				while(regex_match(s.substr(cont,1), numero)){
         			s2=s2+s[cont];
         			if(stol(s2)>2147483647){
-						ob={"error","error",fila,cont+1};
+						Token ob={"error","error",fila,cont+1};
 	        			analisis.pb(ob);
         				return -1;
         			}
         			cont++;
         		}
         		cont--;
-				ob={"tk_entero",s2,fila,columna+1};
+				Token ob={"tk_entero",s2,fila,columna+1};
 	        	analisis.pb(ob);
         		state=0;
         		s2="";
@@ -169,10 +165,10 @@ int solve(string s,int fila,int columna){
 						break;
 					}
     			}
-				ob={"tk_cadena",s2,fila,columna+1};
+				Token ob={"tk_cadena",s2,fila,columna+1};
 	        	analisis.pb(ob);
 				if(int(s[cont])<32 || int(s[cont])>126){
-					ob={"error","error",fila,cont+1};
+					Token ob={"error","error",fila,cont+1};
 	        		analisis.pb(ob);
 					return -1;
 				}
@@ -184,10 +180,10 @@ int solve(string s,int fila,int columna){
     		{
 				cont++;
     			if(s[cont]=='='){
-					ob={"tk_igual_igual","",fila,columna+1};
+					Token ob={"tk_igual_igual","",fila,columna+1};
 	        		analisis.pb(ob);
     			}else{
-					ob={"tk_asig","",fila,columna+1};
+					Token ob={"tk_asig","",fila,columna+1};
 	        		analisis.pb(ob);
 					cont--;
     			}
@@ -199,10 +195,10 @@ int solve(string s,int fila,int columna){
     		{
 				cont++;
     			if(s[cont]=='>'){
-					ob={"tk_ejecuta","",fila,columna};
+					Token ob={"tk_ejecuta","",fila,columna};
 	        		analisis.pb(ob);
     			}else{
-					ob={"tk_neg","",fila,columna+1};
+					Token ob={"tk_neg","",fila,columna+1};
 	        		analisis.pb(ob);
     				cont--;
     			}
@@ -214,7 +210,7 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='/'){
-    				ob={"tk_division","",fila,columna+1};
+    				Token ob={"tk_division","",fila,columna+1};
 	        		analisis.pb(ob);
     			}
     			state=0;
@@ -225,7 +221,7 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='='){
-					ob={"tk_distinto","",fila,columna+1};
+					Token ob={"tk_distinto","",fila,columna+1};
 	        		analisis.pb(ob);
     			}
     			state=0;
@@ -236,10 +232,10 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='='){
-    				ob={"tk_mayor_igual","",fila,columna+1};
+    				Token ob={"tk_mayor_igual","",fila,columna+1};
 	        		analisis.pb(ob);
     			}else{
-					ob={"tk_mayor","",fila,columna+1};
+					Token ob={"tk_mayor","",fila,columna+1};
 	        		analisis.pb(ob);
     				cont--;
     			}
@@ -251,10 +247,10 @@ int solve(string s,int fila,int columna){
     		{
     			cont++;
 				if(s[cont]=='='){
-    				ob={"tk_menor_igual","",fila,columna+1};
+    				Token ob={"tk_menor_igual","",fila,columna+1};
 	        		analisis.pb(ob);
     			}else{
-    				ob={"tk_menor","",fila,columna+1};
+    				Token ob={"tk_menor","",fila,columna+1};
 	        		analisis.pb(ob);
     				cont--;
     			}
@@ -290,7 +286,7 @@ int solve(string s,int fila,int columna){
      			int t=solve(line,fila,col);	
 				if(analisis.size()>0){
 					if(analisis[analisis.size()-1].id!="NEWLINE"){
-						ob={"NEWLINE","",-1,-1};
+						Token ob={"NEWLINE","",-1,-1};
 						analisis.pb(ob);
 					}
 				}
@@ -305,7 +301,13 @@ int solve(string s,int fila,int columna){
 		  cout<<"Unable to open file"<<endl;
 	}
 	ofstream resultado;
-	resultado.open("Resultados/"+texto);
+	if(strcmp(argv[1], "1") == 0){
+		//mkdir("Res_lexer", 0777);
+		resultado.open("Res_lexer/"+texto);
+	}else if(strcmp(argv[1],"2")==0){
+		//mkdir("Res_parser", 0777);
+		resultado.open("Res_parser/"+texto);
+	}
 	if(strcmp(argv[1], "1") == 0){
 		for(auto i:analisis){
 			//if(i.id=="NEWLINE"){
@@ -324,7 +326,8 @@ int solve(string s,int fila,int columna){
 		if(analisis[var1].id=="error" && analisis[var1].info=="error"){
 			resultado<<">>> Error lexico (linea: "<<analisis[var1].fila<<",posicion:"<<analisis[var1].col<<")"<<'\n';
 		}else{
-			resultado<<"In progress"<<'\n';
+			string s=parser_func(analisis);
+			resultado<<s<<'\n';
 		}
 	}else if(strcmp(argv[1], "3") == 0){
 		cout<<"Option no valid"<<endl;

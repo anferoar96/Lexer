@@ -13,7 +13,7 @@ Repositorio con el analizador lexico y sintactico de Chocopy creado en C++
 
 ### Compilacion y ejecucion
 Se puede llevar a cabo por medio de 2 formas:
-1. Usando el comando **make** o **g++ --std=c++11 lexer.cpp -o lexer** para el proceso de compilacion y para la ejecucion con el comando **./lexer var 1.txt** donde el 1.txt es el archivo 1 de los casos de prueba y el **var** es para identificar si el usuario desea realizar un analisis lexico(1) o un analisis sintantico(2). Por ejemplo si se desea realizar un analisis lexico al archivo 2 la instruccion quedaria de la siguiente manera **./lexer 1 2.txt**
+1. Usando el comando **make** o **g++ --std=c++11 lexer.cpp parser.cpp -o lexer** para el proceso de compilacion y para la ejecucion con el comando **./lexer var 1.txt** donde el 1.txt es el archivo 1 de los casos de prueba y el **var** es para identificar si el usuario desea realizar un analisis lexico(1) o un analisis sintantico(2). Por ejemplo si se desea realizar un analisis lexico al archivo 2 la instruccion quedaria de la siguiente manera **./lexer 1 2.txt**
 
 2. Si por el contrario se desea probar todos los casos de pruebas basta con usar el comando **chmod +x todo.sh** para darle permisos y despues el comando **./todo.sh var**  para ejecutarlo, donde **var** indica si se desea hacer un analisis lexico(1) o un analisis sintactico(2). O como alternativa se puede usar el comando **sh todo.sh var** que no requiere permisos.
 
@@ -21,3 +21,4 @@ En ambas formas los resultados son guardados en en la carpeta Resultados. Esta c
 
 ### Nota:
 - Aun no ha sido posible realizar pruebas de funcionamiento del programa en un ambiente Windows
+- Se realizo experimentalmente la creacion automatica del folder para los resultados en ambiente linux
