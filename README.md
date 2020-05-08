@@ -23,7 +23,7 @@ En ambas formas los resultados son guardados en en la carpeta Resultados. Esta c
 
 En Windows solo funciona la ejecucion de un archivo a la vez y para hacerlo se realiza de la siguiente manera. Cabe aclarar que deben crearse manualmente las carpetas Res_lexer y Res_parser, ya que no se encuentra automatizada la creacion en windows a diferencia de linux
 
-1. Se tiene que tener instalado el gcc para eso se pueden guiar de [https://www.youtube.com/watch?v=Ubfgi4NoTPk] 
+1. Se tiene que tener instalado el gcc para eso se pueden guiar de https://www.youtube.com/watch?v=Ubfgi4NoTPk
 
 2. Compilar el programa con el siguiente comando **gcc --std=c++11 lexer.cpp parser.cpp -o lexer** en caso de que les aparesca el error **undefined reference to `__gxx_personality_v0'** se tiene que corres con el comando
 **gcc --std=c++11 lexer.cpp parser.cpp -o lexer -lstdc++**
