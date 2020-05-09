@@ -50,7 +50,6 @@ int solve(string s,int fila,int columna){
 	int cont=-1;
 	regex letra("[a-zA-Z]");
 	regex numero("[0-9]");
-	regex numletra("[0-9a-zA-z]");
 	while(true){
 		switch(state)
     	{
@@ -117,7 +116,7 @@ int solve(string s,int fila,int columna){
         case 1: 
         	{
 	        	cont++;
-				while(s[cont]=='_' || regex_match(s.substr(cont,1), numletra) ){
+				while(s[cont]=='_' || regex_match(s.substr(cont,1), letra) || regex_match(s.substr(cont,1),numero) ){
 	        		s2=s2+s[cont];
 	        		cont++;
 	        	}
