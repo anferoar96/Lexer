@@ -284,8 +284,8 @@ int solve(string s,int fila,int columna){
 				col=1;
      			int t=solve(line,fila,col);	
 				if(analisis.size()>0){
-					if(analisis[analisis.size()-1].id!="NEWLINE"){
-						Token ob={"NEWLINE","",-1,-1};
+					if(analisis[analisis.size()-1].id!="newline"){
+						Token ob={"newline","",-1,-1};
 						analisis.pb(ob);
 					}
 				}
