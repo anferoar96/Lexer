@@ -5,3 +5,4 @@ c:int = 0
 s:str = "Hello"
 f:bool = True
 x:[int] = None
+y:[object] = None

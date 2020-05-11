@@ -45,6 +45,14 @@ void tipo_dato(string& tok){
     }
 }
 
+void id_o(string& tok){
+    if(tok=="object"){
+        emparejar("object",tok);
+    }else{
+        cout<<error<<endl;
+    }
+}
+
 void type_d(string& tok){
     if(tok=="id"){
         id_n(tok);
@@ -52,6 +60,8 @@ void type_d(string& tok){
         emparejar("tk_corch_izq",tok);
         type_d(tok);
         emparejar("tk_corch_der",tok);
+    }else if(tok=="object"){
+        id_o(tok);
     }else{
         tipo_dato(tok);
     }
