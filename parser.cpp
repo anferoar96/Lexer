@@ -5,6 +5,7 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
+#include<set>
 
 using namespace std;
 
@@ -14,6 +15,10 @@ string tok;
 string error="Error sintantico se esperaba";
 
 extern vector<Token> analisis;
+
+set<string>p1={"id","tk_corch_izq","tk_par_izq","tk_neg","none","true","false","tk_entero","tk_cadena"};
+set<string>p2={"none","true","false","tk_entero","tk_cadena"};
+
 
 void emparejar(string esperado,string token){
     cont++;
@@ -99,9 +104,55 @@ void var_def(string& tok){
     }
 }
 
+void target(string& tok){
+    int view=cont+1;
+    if(tok=="id" && analisis[view].id=="tk_igual"){
+        id_n(tok);
+    }else if(p1.find(tok)!=p1.end()){
+        cout<<"Todavia no"<<endl;
+        exit (EXIT_FAILURE);  
+    }else{
+        cout<<error<<endl;
+        exit (EXIT_FAILURE);  
+    }
+    
+    
+}
+void expr(string& tok){
+
+}
+
+void stmt_simple(string& tok){
+    if(p1.find(tok)!=p1.end()){
+        target(tok);
+        emparejar("tk_igual",tok);
+        expr(tok);
+    }else{
+      cout<<error<<endl;
+      exit (EXIT_FAILURE);  
+    }
+}
+
+
+void stmt(string& tok){
+    if(p1.find(tok)!=p1.end()){
+        stmt_simple(tok);
+        emparejar("newline",tok);
+    }else{
+        cout<<error<<endl;
+        exit (EXIT_FAILURE);
+    }
+    
+}
+
 void inicial(string& tok){
     if(tok=="id"){
-        var_def(tok);
+        int view=cont+1;
+        if(analisis[view].id=="tk_dos_puntos"){
+            var_def(tok);
+        }else{
+             stmt(tok);
+        }   
     }else{
         cout<<error<<endl;
         exit (EXIT_FAILURE);
