@@ -156,20 +156,19 @@ int solve(string s,int fila,int columna){
     	case 4:
     		{
 				cont++;
-				while((int(s[cont])>=32 && int(s[cont])<=126) ){ 
+				while((int(s[cont])>=32 && int(s[cont])<=126) && int(s[cont]!=34) ){ 
 					s2=s2+s[cont];
-    				cont++;
-					if(s[cont]=='"'){
-						s2=s2+s[cont];
-						break;
-					}
+					cont++;
     			}
+				s2=s2+s[cont];
 				Token ob={"tk_cadena",s2,fila,columna+1};
 	        	analisis.pb(ob);
-				if(int(s[cont])<32 || int(s[cont])>126){
-					Token ob={"error","error",fila,cont+1};
-	        		analisis.pb(ob);
-					return -1;
+				if(int(s[cont])<32 || int(s[cont])>126 ){
+					if(s[cont]!='\"'){
+						Token ob={"error","error",fila,cont+1};
+	        		     analisis.pb(ob);
+					    return -1;
+					}
 				}
     			state=0;
     			s2="";
@@ -325,7 +324,7 @@ int solve(string s,int fila,int columna){
 		if(analisis[var1].id=="error" && analisis[var1].info=="error"){
 			resultado<<">>> Error lexico (linea: "<<analisis[var1].fila<<",posicion:"<<analisis[var1].col<<")"<<'\n';
 		}else{
-			string s=parser_func(analisis);
+			string s=parser_func();
 			resultado<<s<<'\n';
 		}
 	}else if(strcmp(argv[1], "3") == 0){

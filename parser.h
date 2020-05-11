@@ -3,6 +3,7 @@
 
 using namespace std; 
 
+
 struct Token
 {
 	string id;
@@ -11,4 +12,6 @@ struct Token
 	int col;
 };
 
-string parser_func(vector<Token> pu);
+
+
+string parser_func();
