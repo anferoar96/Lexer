@@ -16,9 +16,9 @@ string error="Error sintantico se esperaba";
 
 extern vector<Token> analisis;
 
-set<string>p1={"id","tk_corch_izq","tk_par_izq","tk_neg","none","true","false","tk_entero","tk_cadena"};
+set<string>p1={"id","tk_corch_izq","tk_par_izq","tk_neg","None","True","False","tk_entero","tk_cadena"};
 set<string>p2={"none","true","false","tk_entero","tk_cadena"};
-
+set<string>p3={"tk_suma","tk_multi","tk_neg","tk_division","tk_modulo","tk_distinto","tk_igual_igual","tk_mayor_igual","tk_menor_igual","tk_mayor","tk_menor","is"};
 
 void emparejar(string esperado,string token){
     cont++;
@@ -55,6 +55,7 @@ void id_o(string& tok){
         emparejar("object",tok);
     }else{
         cout<<error<<endl;
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -84,7 +85,7 @@ void typed_v(string& tok){
 }
 
 void literal(string& tok){
-    if(tok=="None" || tok=="True" || tok=="False" || tok=="tk_entero" || tok=="tk_cadena"){
+    if(tok=="None" || tok=="True" || tok=="False" || tok=="tk_entero" || tok=="tk_cadena" || tok=="id"){
         emparejar(tok,tok);
     }else{
         cout<<error<<endl;
@@ -104,13 +105,55 @@ void var_def(string& tok){
     }
 }
 
-void target(string& tok){
-    int view=cont+1;
-    if(tok=="id" && analisis[view].id=="tk_igual"){
+void expr(string& tok){
+    int sig=cont+1;
+    if(tok=="not"){
+        emparejar(tok,"not");
+        expr(tok);
+    }else{
+        cout<<error<<endl;
+    }
+}
+
+void multi_expr(string& tok){
+    expr(tok);
+    emparejar("tk_coma",tok);
+    multi_expr(tok);
+}
+
+void cexpr(string& tok){
+    if(tok=="id"){
         id_n(tok);
-    }else if(p1.find(tok)!=p1.end()){
-        cout<<"Todavia no"<<endl;
-        exit (EXIT_FAILURE);  
+    }else if(p2.find(tok)!=p2.end()){
+        literal(tok);
+    }else if(tok=="tk_par_izq"){
+        emparejar("tk_par_izq",tok);
+        expr(tok);
+        emparejar("tk_par_der",tok);
+    }else if(tok=="tk_corch_izq"){
+        emparejar("tk_corch_izq",tok);
+        multi_expr(tok);
+        emparejar("tk_corch_der",tok);
+    }else{
+        cout<<error<<endl;
+    }
+
+}
+
+void member_expr(string& tok){
+    if(p1.find(tok)!=p1.end()){
+        cexpr(tok);
+        emparejar("tk_corch_izq",tok);
+        expr(tok);
+        emparejar("tk_corch_der",tok);
+    }else{
+        cout<<error<<endl;
+    }
+}
+
+void target(string& tok){
+    if(p1.find(tok)!=p1.end()){
+        member_expr(tok);
     }else{
         cout<<error<<endl;
         exit (EXIT_FAILURE);  
@@ -118,14 +161,22 @@ void target(string& tok){
     
     
 }
-void expr(string& tok){
+
+
+void multitar(string& tok){
+    if(p1.find(tok)!=p1.end()){
+        target(tok);
+        emparejar("tk_asign",tok);
+        multitar(tok);
+    }else{
+        cout<<error<<endl;
+    }
 
 }
 
 void stmt_simple(string& tok){
     if(p1.find(tok)!=p1.end()){
-        target(tok);
-        emparejar("tk_igual",tok);
+        multitar(tok);
         expr(tok);
     }else{
       cout<<error<<endl;
