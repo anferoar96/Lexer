@@ -164,11 +164,9 @@ int solve(string s,int fila,int columna){
 				Token ob={"tk_cadena",s2,fila,columna+1};
 	        	analisis.pb(ob);
 				if(int(s[cont])<32 || int(s[cont])>126 ){
-					if(s[cont]!='\"'){
-						Token ob={"error","error",fila,cont+1};
-	        		     analisis.pb(ob);
-					    return -1;
-					}
+					Token ob={"error","error",fila,cont+1};
+	        		analisis.pb(ob);
+					return -1;
 				}
     			state=0;
     			s2="";
